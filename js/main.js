@@ -10,11 +10,12 @@ Description: This is the js for the multiplcation table, it has the JQuery code 
 $(document).ready(function() {
 
     // hold val for the start value and end value
-    let xS = parseInt($('#xStart').val()) || -50;
-    let yS = parseInt($('#yStart').val()) || -50;
+    //let xS = parseInt($('#xStart').val()) || -50;
+    //let yS = parseInt($('#yStart').val()) || -50;
 
     $('#myForm').validate({
         rules: {
+            /*
             xStart: {
                 required: true, // required field
                 number: true, // requires a number
@@ -35,13 +36,15 @@ $(document).ready(function() {
                 number: true,
                 range: [yS, 50]
             }
+            */
         },
         messages: {
+            /*
             // sets messages for corresponding errors in the input
             xStart: {
                 required: 'Please enter a value for Horizontal Start Point',
                 number: 'Please enter a valid number for Horizontal Start Point',
-                range: "MUST be greater than or equal to the horizontal start point and less than or equal to 50"
+                range: "MUST be greater than or equal to -50 and lower than or equal to 50"
             },
             xEnd: {
                 required: 'Please enter a value for Horizontal End Point',
@@ -51,19 +54,20 @@ $(document).ready(function() {
             yStart: {
                 required: 'Please enter a value for Vertical Start Point',
                 number: 'Please enter a valid number for Vertical Start Point',
-                range: "MUST be greater than or equal to the horizontal start point and less than or equal to 50"
+                range: "MUST be greater than or equal to -50 and lower than or equal to 50"
             },
             yEnd: {
                 required: 'Please enter a value for Vertical End Point',
                 number: 'Please enter a valid number for Vertical End Point',
                 range: "The number for the Vertical End Point must be larger than the Vertical Start Point and less than or equal to 50" 
             }
+            */
         }
     });
 
     // when xStart is input it will add rules to xEnd so that it knows what the current xStart val is 
     $('#xStart').on('input', function() {
-        const xS2 = parseInt($(this).val());
+        let xS2 = parseInt($('#xStart').val()) || -50;
         $('#xEnd').rules('add', {
             required: true,
             number: true,
@@ -72,13 +76,14 @@ $(document).ready(function() {
                 required: "MUST fill in",
                 number: "MUST be a number input (ie. 4, 3.3, etc.)",
                 range: "MUST be greater than or equal to the horizontal start point and less than or equal to 50"
-          }
+            }
         });
+        $('#yStart').rules('remove'); // disable validation for yStart
     });
       
     // when yStart is input it will add rules to xEnd so that it knows what the current yStart val is 
     $('#yStart').on('input', function() {
-        const yS2 = parseInt($(this).val());
+        let yS2 = parseInt($('#yStart').val()) || -50;
         $('#yEnd').rules('add', {
             required: true,
             number: true,
@@ -87,9 +92,10 @@ $(document).ready(function() {
                 required: "MUST fill in",
                 number: "MUST be a number input (ie. 4, 3.3, etc.)",
                 range: "MUST be greater than or equal to the horizontal start point and less than or equal to 50"
-          }
+            }
         });
-    });
+        $('#xStart').rules('remove'); // disable validation for yStart
+    }).off('focusout');
     
     // adds rules for xStart
     $('#xStart').rules("add", {
@@ -107,7 +113,7 @@ $(document).ready(function() {
     $('#xEnd').rules("add", {
         required: true,
         number: true,
-        range: [xS, 50],
+        range: [-50, 50],
         messages: {
             required: "MUST fill in",
             number: "MUST be a number input (ie. 4, 3.3, etc.)",
@@ -131,7 +137,7 @@ $(document).ready(function() {
     $('#yEnd').rules("add", {
         required: true,
         number: true,
-        range: [yS, 50],
+        range: [-50, 50],
         messages: {
             required: "MUST fill in",
             number: "MUST be a number input (ie. 4, 3.3, etc.)",

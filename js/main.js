@@ -6,144 +6,72 @@ Date Created: June 18, 2023
 Description: This is the js for the multiplcation table, it has the JQuery code that uses the validation plug-in and also handles valid forms to create a multiplication table
 */
 
-// after document is ready the rules and messages get set up
+
+// after document is ready I can 
 $(document).ready(function() {
-
-    // hold val for the start value and end value
-    //let xS = parseInt($('#xStart').val()) || -50;
-    //let yS = parseInt($('#yStart').val()) || -50;
-
+    // added method called "greater than or equal to" to compare the lower bound of the x axis or y axis
+    $.validator.addMethod("greaterTOET", function (value, element, param) {
+        let $lowerBound = $(param);
+        if (this.settings.onfocusout) {
+            $lowerBound.off(".validate-greaterTOET").on("blur.validate-greaterTOET", function() {
+                $(element).valid();
+            });
+        }
+        return parseInt(value) >= parseInt($lowerBound.val());
+    }, "Max must be greater than min");
+    
     $('#myForm').validate({
         rules: {
-            /*
             xStart: {
+                required: true, // required field
+                number: true, // requires a number
+                range: [-50, 50] // sets range from -50 to 50, it's inclusive  
+            },
+            xEnd: {
+                required: true, // required field
+                number: true, // requires a number
+                range: [-50, 50], // sets range from -50 to 50, it's inclusive 
+                greaterTOET: '#xStart'
+            },
+            yStart: {
                 required: true, // required field
                 number: true, // requires a number
                 range: [-50, 50] // sets range from -50 to 50, it's inclusive 
             },
-            xEnd: {
-                required: true,
-                number: true,
-                range: [xS, 50] // sets range from the xS to 50
-            },
-            yStart: {
-                required: true,
-                number: true,
-                range: [-50, 50]
-            },
             yEnd: {
-                required: true,
-                number: true,
-                range: [yS, 50]
+                required: true, // required field
+                number: true, // requires a number
+                range: [-50, 50], // sets range from -50 to 50, it's inclusive 
+                greaterTOET: '#yStart'
             }
-            */
         },
         messages: {
-            /*
-            // sets messages for corresponding errors in the input
+            // messages for each wrong input based on the rules above
             xStart: {
-                required: 'Please enter a value for Horizontal Start Point',
-                number: 'Please enter a valid number for Horizontal Start Point',
-                range: "MUST be greater than or equal to -50 and lower than or equal to 50"
+                required: "MUST fill in",
+                number: "MUST be a number input (ie. 4, 3.3, etc.)",
+                range: "MUST be greater than or equal to -50 and lower than or equal to 50" 
             },
             xEnd: {
-                required: 'Please enter a value for Horizontal End Point',
-                number: 'Please enter a valid number for Horizontal End Point',
-                range: "The number for the Horizontal End Point must be larger than the Horizontal Start Point and less than or equal to 50" 
+                required: "MUST fill in",
+                number: "MUST be a number input (ie. 4, 3.3, etc.)",
+                range: "MUST be greater than or equal to -50 and lower than or equal to 50",
+                greaterTOET: "MUST be larger than or equal the horizontal start val"
             },
             yStart: {
-                required: 'Please enter a value for Vertical Start Point',
-                number: 'Please enter a valid number for Vertical Start Point',
+                required: "MUST fill in",
+                number: "MUST be a number input (ie. 4, 3.3, etc.)",
                 range: "MUST be greater than or equal to -50 and lower than or equal to 50"
             },
             yEnd: {
-                required: 'Please enter a value for Vertical End Point',
-                number: 'Please enter a valid number for Vertical End Point',
-                range: "The number for the Vertical End Point must be larger than the Vertical Start Point and less than or equal to 50" 
+                required: "MUST fill in",
+                number: "MUST be a number input (ie. 4, 3.3, etc.)",
+                range: "MUST be greater than or equal to -50 and lower than or equal to 50",
+                greaterTOET: "MUST be larger than or equal the vertical start val"
             }
-            */
         }
     });
-
-    // when xStart is input it will add rules to xEnd so that it knows what the current xStart val is 
-    $('#xStart').on('input', function() {
-        let xS2 = parseInt($('#xStart').val()) || -50;
-        $('#xEnd').rules('add', {
-            required: true,
-            number: true,
-            range: [xS2, 50],
-            messages: {
-                required: "MUST fill in",
-                number: "MUST be a number input (ie. 4, 3.3, etc.)",
-                range: "MUST be greater than or equal to the horizontal start point and less than or equal to 50"
-            }
-        });
-        $('#yStart').rules('remove'); // disable validation for yStart
-    });
-      
-    // when yStart is input it will add rules to xEnd so that it knows what the current yStart val is 
-    $('#yStart').on('input', function() {
-        let yS2 = parseInt($('#yStart').val()) || -50;
-        $('#yEnd').rules('add', {
-            required: true,
-            number: true,
-            range: [yS2, 50],
-            messages: {
-                required: "MUST fill in",
-                number: "MUST be a number input (ie. 4, 3.3, etc.)",
-                range: "MUST be greater than or equal to the horizontal start point and less than or equal to 50"
-            }
-        });
-        $('#xStart').rules('remove'); // disable validation for yStart
-    }).off('focusout');
     
-    // adds rules for xStart
-    $('#xStart').rules("add", {
-        required: true,
-        number: true,
-        range: [-50, 50],
-        messages: {
-            required: "MUST fill in",
-            number: "MUST be a number input (ie. 4, 3.3, etc.)",
-            range: "MUST be greater than or equal to -50 and lower than or equal to 50"
-        }
-    });
-
-    // adds rules for xEnd
-    $('#xEnd').rules("add", {
-        required: true,
-        number: true,
-        range: [-50, 50],
-        messages: {
-            required: "MUST fill in",
-            number: "MUST be a number input (ie. 4, 3.3, etc.)",
-            range: "The number for the Horizontal End Point must be larger than the Horizontal Start Point and less than or equal to 50"
-        }
-    });
-
-    // adds rules for yStart
-    $('#yStart').rules("add", {
-        required: true,
-        number: true,
-        range: [-50, 50],
-        messages: {
-            required: "MUST fill in",
-            number: "MUST be a number input (ie. 4, 3.3, etc.)",
-            range: "MUST be greater than or equal to -50 and lower than or equal to 50",
-        }
-    });
-
-    // adds rules for yEnd
-    $('#yEnd').rules("add", {
-        required: true,
-        number: true,
-        range: [-50, 50],
-        messages: {
-            required: "MUST fill in",
-            number: "MUST be a number input (ie. 4, 3.3, etc.)",
-            range: "The number for the Vertical End Point must be larger than the Vertical Start Point and less than or equal to 50"
-        }
-    });
     
 });
 
@@ -155,10 +83,10 @@ $(document).ready(function() {
 
         // checks if all input fields are valid
         if ($('#xStart').valid() && $('#xEnd').valid() && $('#yStart').valid() && $('#yEnd').valid()) {
-            console.log('valid');
+            console.log($('#xStart').valid() + ' ' + $('#xEnd').valid() + ' ' + $('#yStart').valid() + ' ' + $('#yEnd').valid());
             createTable();
         } else {
-            console.log("not valid");
+            console.log($('#xStart').valid() + ' ' + $('#xEnd').valid() + ' ' + $('#yStart').valid() + ' ' + $('#yEnd').valid());
         }
         
     });

@@ -92,6 +92,9 @@ td:nth-child(odd) {
 }
 
 /* makes the first letter uppercase */
-.error::first-letter {
+.error:nth-child(0),
+.error:nth-child(1),
+.error:nth-child(2),
+.error:nth-child(3) {
     text-transform: capitalize;
 }
